@@ -1,6 +1,5 @@
 use git2::{Repository, Status};
-use std::env;
-use std::path::Path;
+use std::{env, fmt::Display, path::Path};
 use tico::tico;
 
 pub use ansi_term::Color;
@@ -91,26 +90,22 @@ impl Prompt {
 
         let vcs_status = vcs_status();
 
-        // The prompt character should not be colored, as this causes
-        // many bugs. See the link below for one example and discussion
-        // of this, but there are several others on the pista repository.
-        //
-        // https://github.com/NerdyPepper/pista/issues/3
         let prompt_char = get_char();
 
         match vcs_status {
             Some((branch, status)) => {
-                let branch = self.git_branch_color.paint(branch);
+                let branch = apply_color(branch, self.git_branch_color);
                 let status = match status {
-                    GitStatus::Clean => self
-                        .git_status_clean_color
-                        .paint(self.git_status_clean_icon),
-                    GitStatus::Unstaged => self
-                        .git_status_unstaged_color
-                        .paint(self.git_status_unstaged_icon),
-                    GitStatus::Staged => self
-                        .git_status_staged_color
-                        .paint(self.git_status_staged_icon),
+                    GitStatus::Clean => {
+                        apply_color(self.git_status_clean_icon, self.git_status_clean_color)
+                    }
+                    GitStatus::Unstaged => apply_color(
+                        self.git_status_unstaged_icon,
+                        self.git_status_unstaged_color,
+                    ),
+                    GitStatus::Staged => {
+                        apply_color(self.git_status_staged_icon, self.git_status_staged_color)
+                    }
                 };
                 println!(
                     "{cwd} {branch} {status}\n{pchar} ",
@@ -143,6 +138,21 @@ impl Prompt {
 
         Some(path)
     }
+}
+
+fn apply_color(text: impl Display, color: Color) -> String {
+    let start_color_code = 1 as char;
+    let end_color_code = 2 as char;
+    format!(
+        "{}{}{}{}{}{}{}",
+        start_color_code,
+        color.prefix(),
+        end_color_code,
+        text,
+        start_color_code,
+        color.suffix(),
+        end_color_code,
+    )
 }
 
 fn get_char() -> &'static str {
