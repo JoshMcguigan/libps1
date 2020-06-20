@@ -1,6 +1,6 @@
 use git2::{Repository, Status};
 use std::env;
-use std::{fmt::Display, path::Path};
+use std::path::Path;
 use tico::tico;
 
 pub use ansi_term::Color;
@@ -15,9 +15,9 @@ pub struct Prompt {
     pub git_status_clean_color: Color,
     pub git_status_unstaged_color: Color,
     pub git_status_staged_color: Color,
-    pub git_status_clean_icon: Box<dyn Display>,
-    pub git_status_unstaged_icon: Box<dyn Display>,
-    pub git_status_staged_icon: Box<dyn Display>,
+    pub git_status_clean_icon: &'static str,
+    pub git_status_unstaged_icon: &'static str,
+    pub git_status_staged_icon: &'static str,
 }
 
 impl Default for Prompt {
@@ -28,9 +28,9 @@ impl Default for Prompt {
             git_status_clean_color: Green,
             git_status_unstaged_color: Red,
             git_status_staged_color: Yellow,
-            git_status_clean_icon: Box::new("✓"),
-            git_status_unstaged_icon: Box::new("×"),
-            git_status_staged_icon: Box::new("±"),
+            git_status_clean_icon: "✓",
+            git_status_unstaged_icon: "×",
+            git_status_staged_icon: "±",
         }
     }
 }
@@ -87,13 +87,13 @@ impl Prompt {
                 let status = match status {
                     GitStatus::Clean => self
                         .git_status_clean_color
-                        .paint(self.git_status_clean_icon.to_string()),
+                        .paint(self.git_status_clean_icon),
                     GitStatus::Unstaged => self
                         .git_status_unstaged_color
-                        .paint(self.git_status_unstaged_icon.to_string()),
+                        .paint(self.git_status_unstaged_icon),
                     GitStatus::Staged => self
                         .git_status_staged_color
-                        .paint(self.git_status_staged_icon.to_string()),
+                        .paint(self.git_status_staged_icon),
                 };
                 println!(
                     "{cwd} {branch} {status}\n{pchar} ",
