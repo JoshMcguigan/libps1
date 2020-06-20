@@ -48,7 +48,6 @@ use libps1::{
 /// using libps1.
 fn main() {
     Prompt {
-
         // Colors
         cwd_color: Purple,
         git_branch_color: RGB(0x17, 0xC8, 0xB0),
@@ -59,8 +58,11 @@ fn main() {
         // Icons
         git_status_clean_icon: "➖",
         git_status_unstaged_icon: "❌",
-        git_status_staged_icon: "➕"
+        git_status_staged_icon: "➕",
 
+        // Current working directory
+        shorten_cwd: false,
+        shorten_home_cwd: Some("⌂"),
         // If you'd prefer not to specify all of the values, uncomment
         // the line below to fall back on a theme. And add the import
         // to the top of the file.
