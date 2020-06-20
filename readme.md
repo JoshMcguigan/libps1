@@ -33,7 +33,7 @@ cargo new --bin my_shell # pick your own name here
 ```toml
 # cargo.toml
 [dependencies]
-libps1 = { git = "https::/github.com/joshmcguigan/libps1" }
+libps1 = { git = "https://github.com/joshmcguigan/libps1" }
 ```
 
 ```rust
