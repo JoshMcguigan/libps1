@@ -11,39 +11,43 @@ pub use themes::Theme;
 
 pub struct Prompt {
     pub cwd_color: Color,
+    /// Shorten the current working directory, by only printing
+    /// the first character of each but the last directory.
+    ///
+    /// For exapmle, `/tmp/my_dir/foo` would become `/t/m/foo`.
+    pub cwd_shorten_directories: bool,
+
+    /// If provided, this string will be used in place of `/home/my_user`
+    /// when printing the current working directory. For example, if
+    /// this is set to `Some("~")`, then `/home/my_user/foo` will be
+    /// printed as `~/foo`.
+    pub cwd_shorten_home: Option<&'static str>,
+
     pub git_branch_color: Color,
+
     pub git_status_clean_color: Color,
     pub git_status_unstaged_color: Color,
     pub git_status_staged_color: Color,
     pub git_status_clean_icon: &'static str,
     pub git_status_unstaged_icon: &'static str,
     pub git_status_staged_icon: &'static str,
-    /// Shorten the current working directory, by only printing
-    /// the first character of each but the last directory.
-    ///
-    /// For exapmle, `/tmp/my_dir/foo` would become `/t/m/foo`.
-    pub shorten_cwd: bool,
-
-    /// If provided, this string will be used in place of `/home/my_user`
-    /// when printing the current working directory. For example, if
-    /// this is set to `Some("~")`, then `/home/my_user/foo` will be
-    /// printed as `~/foo`.
-    pub shorten_home_cwd: Option<&'static str>,
 }
 
 impl Default for Prompt {
     fn default() -> Self {
         Self {
             cwd_color: Cyan,
+            cwd_shorten_directories: false,
+            cwd_shorten_home: Some("~"),
+
             git_branch_color: Blue,
+
             git_status_clean_color: Green,
             git_status_unstaged_color: Red,
             git_status_staged_color: Yellow,
             git_status_clean_icon: "✓",
             git_status_unstaged_icon: "×",
             git_status_staged_icon: "±",
-            shorten_cwd: false,
-            shorten_home_cwd: Some("~"),
         }
     }
 }
@@ -124,7 +128,7 @@ impl Prompt {
         let path_env = env::current_dir().ok()?;
         let mut path = format!("{}", path_env.display());
 
-        if let Some(user_desired_home_str) = self.shorten_home_cwd {
+        if let Some(user_desired_home_str) = self.cwd_shorten_home {
             let home_dir = env::var("HOME").unwrap();
             let home_dir_ext = format!("{}/", home_dir);
 
@@ -133,7 +137,7 @@ impl Prompt {
             }
         }
 
-        if self.shorten_cwd {
+        if self.cwd_shorten_directories {
             path = tico(&path);
         }
 
