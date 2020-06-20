@@ -1,6 +1,6 @@
 use git2::{Repository, Status};
 use std::env;
-use std::path::Path;
+use std::{fmt::Display, path::Path};
 use tico::tico;
 
 pub use ansi_term::Color;
@@ -15,6 +15,9 @@ pub struct Prompt {
     pub git_status_clean_color: Color,
     pub git_status_unstaged_color: Color,
     pub git_status_staged_color: Color,
+    pub git_status_clean_icon: Box<dyn Display>,
+    pub git_status_unstaged_icon: Box<dyn Display>,
+    pub git_status_staged_icon: Box<dyn Display>,
 }
 
 impl Default for Prompt {
@@ -25,6 +28,9 @@ impl Default for Prompt {
             git_status_clean_color: Green,
             git_status_unstaged_color: Red,
             git_status_staged_color: Yellow,
+            git_status_clean_icon: Box::new("✓"),
+            git_status_unstaged_icon: Box::new("×"),
+            git_status_staged_icon: Box::new("±"),
         }
     }
 }
@@ -45,6 +51,7 @@ impl Prompt {
                     git_status_clean_color: nord_14,
                     git_status_unstaged_color: nord_11,
                     git_status_staged_color: nord_13,
+                    ..Self::default()
                 }
             }
             Theme::Solarized => Self {
@@ -53,6 +60,7 @@ impl Prompt {
                 git_status_clean_color: RGB(0x58, 0x6E, 0x75),
                 git_status_unstaged_color: RGB(0xCB, 0x4B, 0x16),
                 git_status_staged_color: RGB(0x65, 0x7B, 0x83),
+                ..Self::default()
             },
         }
     }
@@ -77,9 +85,15 @@ impl Prompt {
             Some((branch, status)) => {
                 let branch = self.git_branch_color.paint(branch);
                 let status = match status {
-                    GitStatus::Clean => self.git_status_clean_color.paint("·"),
-                    GitStatus::Unstaged => self.git_status_unstaged_color.paint("×"),
-                    GitStatus::Staged => self.git_status_staged_color.paint("±"),
+                    GitStatus::Clean => self
+                        .git_status_clean_color
+                        .paint(self.git_status_clean_icon.to_string()),
+                    GitStatus::Unstaged => self
+                        .git_status_unstaged_color
+                        .paint(self.git_status_unstaged_icon.to_string()),
+                    GitStatus::Staged => self
+                        .git_status_staged_color
+                        .paint(self.git_status_staged_icon.to_string()),
                 };
                 println!(
                     "{cwd} {branch} {status}\n{pchar} ",
