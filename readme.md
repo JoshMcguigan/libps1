@@ -48,13 +48,22 @@ use libps1::{
 /// using libps1.
 fn main() {
     Prompt {
+
+        // Colors
         cwd_color: Purple,
         git_branch_color: RGB(0x17, 0xC8, 0xB0),
         git_status_clean_color: Green,
         git_status_unstaged_color: Red,
         git_status_staged_color: Yellow,
+
+        // Icons
+        git_status_clean_icon: "➖",
+        git_status_unstaged_icon: "❌",
+        git_status_staged_icon: "➕"
+
         // If you'd prefer not to specify all of the values, uncomment
-        // the line below to fall back on a theme.
+        // the line below to fall back on a theme. And add the import
+        // to the top of the file.
         //
         // use libps1::Theme::Solarized;
         // ..Prompt::with_theme(Solarized)
