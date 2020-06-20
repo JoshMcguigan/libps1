@@ -60,6 +60,8 @@ fn main() {
         git_status_clean_icon: "➖",
         git_status_unstaged_icon: "❌",
         git_status_staged_icon: "➕",
+
+        prompt_char_separator: "\n",
         // If you'd prefer not to specify all of the values, uncomment
         // the line below to fall back on a theme. And add the import
         // to the top of the file.

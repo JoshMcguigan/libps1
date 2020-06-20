@@ -30,6 +30,12 @@ pub struct Prompt {
     pub git_status_clean_icon: &'static str,
     pub git_status_unstaged_icon: &'static str,
     pub git_status_staged_icon: &'static str,
+
+    /// Specify the string used to separate the prompt character
+    /// from the preceding text. Some useful values for this are
+    /// " " (single whitespace) or "\n" to draw the prompt character
+    /// on a new line.
+    pub prompt_char_separator: &'static str,
 }
 
 impl Default for Prompt {
@@ -47,6 +53,8 @@ impl Default for Prompt {
             git_status_clean_icon: "✓",
             git_status_unstaged_icon: "×",
             git_status_staged_icon: "±",
+
+            prompt_char_separator: "\n",
         }
     }
 }
@@ -85,7 +93,7 @@ impl Prompt {
         let cwd = {
             let cwd = self.cwd().unwrap_or_else(|| "".into());
 
-            self.cwd_color.paint(cwd)
+            apply_color(cwd, self.cwd_color)
         };
 
         let vcs_status = vcs_status();
@@ -108,14 +116,20 @@ impl Prompt {
                     }
                 };
                 println!(
-                    "{cwd} {branch} {status}\n{pchar} ",
+                    "{cwd} {branch} {status}{separator}{pchar} ",
                     cwd = cwd,
                     branch = branch,
                     status = status,
+                    separator = self.prompt_char_separator,
                     pchar = prompt_char,
                 )
             }
-            None => println!("{cwd}\n{pchar} ", cwd = cwd, pchar = prompt_char,),
+            None => println!(
+                "{cwd}{separator}{pchar} ",
+                cwd = cwd,
+                separator = self.prompt_char_separator,
+                pchar = prompt_char,
+            ),
         };
     }
 
