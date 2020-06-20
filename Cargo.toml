@@ -1,0 +1,21 @@
+[package]
+name = "libps1"
+version = "0.0.1"
+authors = ["Josh Mcguigan", "NerdyPepper <akshayoppiliappan@gmail.com>"]
+edition = "2018"
+description = "A simple bash prompt for programmers"
+homepage = "https://github.com/joshmcguigan/libps1"
+repository = "https://github.com/joshmcguigan/libps1"
+readme = "./readme.md"
+keywords = ["shell", "prompt", "theme", "cli"]
+categories = ["command-line-interface", "command-line-utilities", "config"]
+license = "MIT"
+
+[dependencies]
+tico = "1.0"
+libc = "0.2"
+git2 = "0.8"
+ansi_term = "0.12"
+
+[dev-dependencies]
+structopt = "0.3"
