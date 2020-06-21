@@ -138,7 +138,7 @@ impl Prompt {
         let mut path = format!("{}", path_env.display());
 
         if let Some(user_desired_home_str) = self.cwd_shorten_home {
-            let home_dir = env::var("HOME").unwrap();
+            let home_dir = env::var("HOME").ok()?;
             let home_dir_ext = format!("{}/", home_dir);
 
             if (path == home_dir) || path.starts_with(&home_dir_ext) {
@@ -217,9 +217,9 @@ fn vcs_status() -> Option<(String, GitStatus)> {
     let reference = repo.head().ok()?;
 
     let branch = if reference.is_branch() {
-        format!("{}{}", reference.shorthand().unwrap(), commit_dist)
+        format!("{}{}", reference.shorthand()?, commit_dist)
     } else {
-        let commit = reference.peel_to_commit().unwrap();
+        let commit = reference.peel_to_commit().ok()?;
         let id = commit.id();
 
         format!("{:.6}{}", id, commit_dist)
@@ -227,7 +227,7 @@ fn vcs_status() -> Option<(String, GitStatus)> {
 
     let mut repo_status = GitStatus::Clean;
 
-    for file in repo.statuses(None).unwrap().iter() {
+    for file in repo.statuses(None).ok()?.iter() {
         match file.status() {
             // STATE: unstaged (working tree modified)
             Status::WT_NEW
