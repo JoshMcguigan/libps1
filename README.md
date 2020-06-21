@@ -24,6 +24,16 @@ PS1='$(binps1)'
 PS1='$(binps1 --theme solarized)'
 ```
 
+```shell
+# .zshrc
+
+autoload -Uz add-zsh-hook
+_prompt() {
+	PS1="$(binps1 --theme solarized)"
+}
+add-zsh-hook precmd _prompt
+```
+
 ### Option 2 - Make it your own!
 
 ```shell
@@ -73,7 +83,7 @@ fn main() {
 }
 ```
 
-Then `cargo install` your binary and setup your `.bashrc` as shown in Option 1.
+Then `cargo install` your binary and setup your `.bashrc`/`.zshrc` as shown in Option 1.
 
 ## Related Projects
 
