@@ -1,6 +1,6 @@
 # libps1
 
-libps1 is an experimental shell prompt for power users. There are many great shell prompt prjects in existence, but this one is different. While nearly every other option uses some kind of configuration file (toml, yaml, etc), libps1 is intended to be used as a library, so it can be customized and documented using the incredible tooling developed by the Rust ecosystem. No more wondering what other options are available, or if you are spelling things correctly, your IDE and the compiler will guide you.
+libps1 is an experimental shell prompt for power users. There are many great shell prompt projects in existence, but this one is different. While nearly every other option uses some kind of configuration file (toml, yaml, etc), libps1 is intended to be used as a library, so it can be customized and documented using the incredible tooling developed by the Rust ecosystem. No more wondering what other options are available, or if you are spelling things correctly, your IDE and the compiler will guide you.
 
 ![screenshot](https://user-images.githubusercontent.com/22216761/85191296-2d58d100-b273-11ea-99b7-45653b579d49.png)
 
